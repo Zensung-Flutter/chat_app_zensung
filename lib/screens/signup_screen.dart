@@ -25,7 +25,7 @@ class SignupScreen extends StatelessWidget {
                   height: 50,
                 ),
                 const Text(
-                  'Login',
+                  'Sign Up',
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 30,
@@ -53,12 +53,7 @@ class SignupScreen extends StatelessWidget {
                     textEditingController: passwordTextController,
                   ),
                 ),
-                Text(
-                  'Forgot Password ?',
-                  style: TextStyle(
-                    color: Colors.blue[900],
-                  ),
-                ),
+                
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: InkWell(
@@ -70,7 +65,7 @@ class SignupScreen extends StatelessWidget {
                       height: 50,
                       child: Center(
                           child: Text(
-                        'Login',
+                        'Sign Up',
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -83,11 +78,16 @@ class SignupScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(
-                  'Dont have account ? Sign Up',
-                  style: TextStyle(
-                    color: Colors.blue[900],
+                InkWell(
+                  child: Text(
+                    'Already have an account ? login',
+                    style: TextStyle(
+                      color: Colors.blue[900],
+                    ),
                   ),
+                  onTap: (){
+                    Navigator.pop(context);
+                  }
                 ),
               ],
             ),

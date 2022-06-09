@@ -1,3 +1,4 @@
+import 'package:chat_app/screens/signup_screen.dart';
 import 'package:chat_app/screens/users_screen.dart';
 import 'package:chat_app/widgets/custom_text_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -83,11 +84,15 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(
-                  'Dont have account ? Sign Up',
-                  style: TextStyle(
-                    color: Colors.blue[900],
+                InkWell(
+                  child: Text(
+                    'Dont have account ? Sign Up',
+                    style: TextStyle(
+                      color: Colors.blue[900],
+                    ),
                   ),
+                  onTap: ()=> Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => SignupScreen())),
                 ),
               ],
             ),
