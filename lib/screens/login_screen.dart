@@ -26,7 +26,7 @@ class LoginScreen extends StatelessWidget {
                   height: 50,
                 ),
                 const Text(
-                  'Login',
+                  'Sign In',
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 30,

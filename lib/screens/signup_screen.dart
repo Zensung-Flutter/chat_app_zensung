@@ -82,7 +82,7 @@ class SignupScreen extends StatelessWidget {
                     Navigator.of(context).pop();
                   },
                   child: Text(
-                    'Already have account ? Login',
+                    'Already have account ? Sign In',
                     style: TextStyle(
                       color: Colors.blue[900],
                     ),
