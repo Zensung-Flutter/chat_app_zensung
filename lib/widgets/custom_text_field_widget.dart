@@ -20,7 +20,23 @@ class CustomTextFieldWidget extends StatelessWidget {
       controller: textEditingController,
       obscureText: isObscure ?? false,
       decoration: InputDecoration(
-        prefixIcon: Icon(icon, color: Colors.grey),
+        prefixIcon: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 5,
+            ),
+            Icon(icon, color: Colors.grey),
+            SizedBox(
+              width: 5,
+            ),
+            Container(
+              height: 25,
+              width: 2,
+              color: Colors.black,
+            ),
+          ],
+        ),
         border: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey),
           borderRadius: BorderRadius.circular(10.0),
