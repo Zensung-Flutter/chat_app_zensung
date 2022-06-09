@@ -25,7 +25,7 @@ class SignupScreen extends StatelessWidget {
                   height: 50,
                 ),
                 const Text(
-                  'Login',
+                  'Sign Up',
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 30,
@@ -53,12 +53,6 @@ class SignupScreen extends StatelessWidget {
                     textEditingController: passwordTextController,
                   ),
                 ),
-                Text(
-                  'Forgot Password ?',
-                  style: TextStyle(
-                    color: Colors.blue[900],
-                  ),
-                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: InkWell(
@@ -70,7 +64,7 @@ class SignupScreen extends StatelessWidget {
                       height: 50,
                       child: Center(
                           child: Text(
-                        'Login',
+                        'Sign Up',
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -83,10 +77,15 @@ class SignupScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(
-                  'Dont have account ? Sign Up',
-                  style: TextStyle(
-                    color: Colors.blue[900],
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'Already have account ? Login',
+                    style: TextStyle(
+                      color: Colors.blue[900],
+                    ),
                   ),
                 ),
               ],
@@ -104,7 +103,7 @@ class SignupScreen extends StatelessWidget {
     if (emailId == 'login' && password == '12') {
       emailIdTextController.clear();
       passwordTextController.clear();
-      
+
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (_) => UsersScreen()), (route) => false);
     } else {
