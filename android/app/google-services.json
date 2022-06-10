@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "216856966828",
+    "project_id": "chat-zensung",
+    "storage_bucket": "chat-zensung.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:216856966828:android:37704961d74ba3ee8ad109",
+        "android_client_info": {
+          "package_name": "com.example.chat_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "216856966828-bg5os6l3djgveac20qfe84lgc9aggo14.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chat_app",
+            "certificate_hash": "98f252d95f32897b9386ec2938b518ccdeec203c"
+          }
+        },
+        {
+          "client_id": "216856966828-gb5rcv6p83an5t8om0nhpfhqj63a8b0p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDp1c8lkRPxfOQwDwNSHAXpsP-VimpelAE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "216856966828-gb5rcv6p83an5t8om0nhpfhqj63a8b0p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "216856966828-7th6v1pmgk3o8rs6ghemdnq25m4c209p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.chatApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
