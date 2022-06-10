@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "799870582441",
+    "project_id": "chat-zensung-shweta",
+    "storage_bucket": "chat-zensung-shweta.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:799870582441:android:89ddb8c034673e4b0cf3b8",
+        "android_client_info": {
+          "package_name": "com.example.chat_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "799870582441-ecff8o33sd4g053slikd943o23v0eka4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chat_app",
+            "certificate_hash": "9416d5b9d2815cec17610cf6c6eeb4b5ba815376"
+          }
+        },
+        {
+          "client_id": "799870582441-87n98siptp1c7j44ioooq53gr9kai31h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC71CxCIJhqngC-ju8aeBvYZlBlJf60xc0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "799870582441-87n98siptp1c7j44ioooq53gr9kai31h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
