@@ -1,5 +1,6 @@
 import 'package:chat_app/screens/users_screen.dart';
 import 'package:chat_app/widgets/custom_text_field_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignupScreen extends StatelessWidget {
@@ -56,7 +57,7 @@ class SignupScreen extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: InkWell(
                     onTap: () {
-                      loginUser(context);
+                      SignupUser(context);
                     },
                     child: Container(
                       width: double.infinity,
@@ -90,16 +91,24 @@ class SignupScreen extends StatelessWidget {
     );
   }
 
-  void loginUser(BuildContext context) {
+  void SignupUser(BuildContext context) {
     emailId = emailIdTextController.text;
     password = passwordTextController.text;
-
-    if (emailId == 'login' && password == '12') {
+    if (emailId.isNotEmpty && password.isNotEmpty) {
       emailIdTextController.clear();
       passwordTextController.clear();
-
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => UsersScreen()), (route) => false);
+      FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: emailId, password: password)
+          .then((value) {
+        var user = value.user;
+        if (user != null) {
+          print(user.uid);
+        }
+      }).catchError(
+        (e) {
+          print(e.toString());
+        },
+      );
     } else {
       print('Invalid Credentials');
     }
