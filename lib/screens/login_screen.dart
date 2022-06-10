@@ -4,15 +4,24 @@ import 'package:chat_app/widgets/custom_text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   String emailId = '';
+
   String password = '';
+
+  bool isPasswordObscure = true;
 
   TextEditingController emailIdTextController = TextEditingController();
 
   TextEditingController passwordTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,8 +59,27 @@ class LoginScreen extends StatelessWidget {
                   child: CustomTextFieldWidget(
                     labelText: 'password',
                     icon: Icons.lock,
-                    isObscure: true,
+                    isObscure: isPasswordObscure,
                     textEditingController: passwordTextController,
+                    iconButton: IconButton(
+                      icon: Icon(isPasswordObscure
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          // Does the same as the bottom line 
+
+                          // if (isPasswordObscure == true) {
+                          //   isPasswordObscure = false;
+                          // } else {
+                          //   isPasswordObscure = true;
+                          // }
+
+                          
+                          isPasswordObscure = !isPasswordObscure;
+                        });
+                      },
+                    ),
                   ),
                 ),
                 Text(
