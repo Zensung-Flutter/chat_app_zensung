@@ -1,17 +1,25 @@
 import 'package:chat_app/screens/users_screen.dart';
 import 'package:chat_app/widgets/custom_text_field_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class SignupScreen extends StatelessWidget {
+class SignupScreen extends StatefulWidget {
   SignupScreen({super.key});
 
+  @override
+  State<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
   String emailId = '';
+
   String password = '';
 
   TextEditingController emailIdTextController = TextEditingController();
 
   TextEditingController passwordTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,6 +111,7 @@ class SignupScreen extends StatelessWidget {
         var user = value.user;
         if (user != null) {
           print(user.uid);
+          addUseDataToDatabase(user.uid);
         }
       }).catchError(
         (e) {
@@ -112,5 +121,24 @@ class SignupScreen extends StatelessWidget {
     } else {
       print('Invalid Credentials');
     }
+  }
+
+  void addUseDataToDatabase(String uid) {
+    String timestamp = DateTime.now().microsecondsSinceEpoch.toString();
+    Map<String, dynamic> data = {
+      'name': 'santosh${timestamp}',
+      'uid': uid,
+      'timestamp': timestamp,
+      'age': "39",
+      'isOnline': true
+    };
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .set(data)
+        .then((value) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => UsersScreen()), (route) => false);
+    });
   }
 }

@@ -1,18 +1,27 @@
 import 'package:chat_app/screens/signup_screen.dart';
 import 'package:chat_app/screens/users_screen.dart';
 import 'package:chat_app/widgets/custom_text_field_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   String emailId = '';
+
   String password = '';
+
+  bool isPasswordObsure = true;
 
   TextEditingController emailIdTextController = TextEditingController();
 
   TextEditingController passwordTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,8 +59,18 @@ class LoginScreen extends StatelessWidget {
                   child: CustomTextFieldWidget(
                     labelText: 'password',
                     icon: Icons.lock,
-                    isObscure: true,
+                    isObscure: isPasswordObsure,
                     textEditingController: passwordTextController,
+                    iconButton: IconButton(
+                      icon: Icon(isPasswordObsure
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          isPasswordObsure = !isPasswordObsure;
+                        });
+                      },
+                    ),
                   ),
                 ),
                 Text(
@@ -64,7 +83,7 @@ class LoginScreen extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: InkWell(
                     onTap: () {
-                      loginUser(context);
+                      loginUser();
                     },
                     child: Container(
                       width: double.infinity,
@@ -105,16 +124,24 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  void loginUser(BuildContext context) {
+  void loginUser() {
     emailId = emailIdTextController.text;
     password = passwordTextController.text;
 
-    if (emailId == 'login' && password == '12') {
-      emailIdTextController.clear();
-      passwordTextController.clear();
-
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => UsersScreen()), (route) => false);
+    if (emailId.isNotEmpty && password.isNotEmpty) {
+      FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: emailId, password: password)
+          .then((value) {
+        var user = value.user;
+        if (user != null) {
+          print(user.uid);
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (_) => UsersScreen()),
+              (route) => false);
+        }
+      }).catchError((e) {
+        print(e.toString());
+      });
     } else {
       print('Invalid Credentials');
     }

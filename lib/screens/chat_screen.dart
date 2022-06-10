@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
-class ChatScreen extends StatelessWidget {
-  const ChatScreen({super.key});
+class ChatScreen extends StatefulWidget {
+  const ChatScreen({super.key, required this.userid, required this.username});
+  final String userid;
+  final String username;
 
   @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(title: Text(widget.username)),
+    );
   }
 }
