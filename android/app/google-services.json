@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "574551979592",
+    "project_id": "chat-zensung-devdatta",
+    "storage_bucket": "chat-zensung-devdatta.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:574551979592:android:ed5ba75c0ed93ba145ca7d",
+        "android_client_info": {
+          "package_name": "com.example.chat_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "574551979592-o3lldh8kpvgat0tfhfhkl4hp0cvrbkp5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chat_app",
+            "certificate_hash": "c926538028c104dff5e32a567f6bec2d8042c632"
+          }
+        },
+        {
+          "client_id": "574551979592-f8kafvgarln3bs53egsnd80g2vj7huae.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDI1TnuHLo4B3qrKlpg-sOZcdJ4xsp6480"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "574551979592-f8kafvgarln3bs53egsnd80g2vj7huae.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
