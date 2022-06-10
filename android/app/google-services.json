@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "339044975470",
+    "project_id": "chat-zensung-rohit",
+    "storage_bucket": "chat-zensung-rohit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:339044975470:android:db8c8cdbb5a95b0ad9b77f",
+        "android_client_info": {
+          "package_name": "com.example.chat_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "339044975470-8ckrfpdhtigasuimud35538bh2r41tr6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chat_app",
+            "certificate_hash": "ed09ad83d34a0652db9dfd7a0949d089a0b6de13"
+          }
+        },
+        {
+          "client_id": "339044975470-v32d61tqa7nek67ob1lo5m3eptjma0qc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxORF66pyGfqclf23W3tgOXJe9ZEXC2co"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "339044975470-v32d61tqa7nek67ob1lo5m3eptjma0qc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
