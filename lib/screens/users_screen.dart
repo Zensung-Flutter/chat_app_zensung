@@ -1,9 +1,11 @@
+
 import 'package:chat_app/screens/chat_screen.dart';
 import 'package:chat_app/screens/login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
+import '../utlis/utilities.dart';
 
 class UsersScreen extends StatefulWidget {
   const UsersScreen({super.key});
@@ -18,7 +20,6 @@ class _UsersScreenState extends State<UsersScreen> {
   @override
   void initState() {
     super.initState();
-
     getUser();
   }
 
@@ -40,45 +41,24 @@ class _UsersScreenState extends State<UsersScreen> {
             return GestureDetector(
               child: Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(top: 20.0, bottom: 20.0),
-                            child: Text(
-                                '${users[index]['firstName']} ${users[index]['lastName']}'),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        getUserInitials(users[index]['firstName'],
+                            users[index]['lastName']),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        Text(
+                          getUserName(users[index]['firstName'],
+                              users[index]['lastName']),
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontSize: 18,
                           ),
-                          Text(
-                            users[index]['age'].toString(),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Container(
-                              width: 10,
-                              height: 10,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: users[index]['isOnline']
-                                      ? Colors.green
-                                      : Colors.red),
-                            ),
-                          ),
-                          Text(users[index]['timestamp']),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                        ),
+                      ],
+                    )),
               ),
               onTap: () {
                 Navigator.push(
@@ -86,7 +66,8 @@ class _UsersScreenState extends State<UsersScreen> {
                     MaterialPageRoute(
                         builder: (_) => ChatScreen(
                             userUid: users[index]['uid'],
-                            userName: users[index]['firstName'])));
+                            userName: getUserName(users[index]['firstName'],
+                                users[index]['lastName']))));
               },
             );
           },
@@ -114,4 +95,5 @@ class _UsersScreenState extends State<UsersScreen> {
       print(e.toString());
     });
   }
+
 }
