@@ -1,6 +1,7 @@
 import 'package:chat_app/screens/signup_screen.dart';
 import 'package:chat_app/screens/users_screen.dart';
 import 'package:chat_app/widgets/custom_text_field_widget.dart';
+import 'package:chat_app/widgets/overlay_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -13,18 +14,18 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   String emailId = '';
-
   String password = '';
-
   bool isPasswordObsure = true;
-
   TextEditingController emailIdTextController = TextEditingController();
-
   TextEditingController passwordTextController = TextEditingController();
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  bool _load = false;
+  bool _isCallOnce = false;
+  OverlayEntry? entry;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
@@ -83,7 +84,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: InkWell(
                     onTap: () {
-                      loginUser();
+                      if (!_isCallOnce) {
+                        loginUser();
+                      }
                     },
                     child: Container(
                       width: double.infinity,
@@ -124,25 +127,74 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void loginUser() {
+  // void ShowOverLay() {
+  //   entry = OverlayEntry(
+  //     builder: (context) => Positioned(
+  //       left: 20,
+  //       top: 30,
+  //       child: _load
+  //           ? Container(
+  //               color: Colors.white,
+  //               width: 70.0,
+  //               height: 70.0,
+  //               child: Padding(
+  //                 padding: const EdgeInsets.all(10.0),
+  //                 child: Center(child: CircularProgressIndicator()),
+  //               ))
+  //           : Container(),
+  //     ),
+  //   );
+  //   final overlay = Overlay.of(context);
+  //   overlay?.insert(entry!);
+  // }
+
+  // void RemoveOverLay() {
+  //   entry?.remove();
+  // }
+
+  void InsertOverLay() {
+    double middleX = MediaQuery.of(context).size.width / 2;
+    double middleY = MediaQuery.of(context).size.height / 2;
+    entry = OverlayEntry(
+      builder: (context) => OverlLayWidget(middleX: middleX, middleY: middleY),
+    );
+    final overlay = Overlay.of(context);
+    overlay?.insert(entry!);
+  }
+
+  void RemoveOverLay() {
+    entry?.remove();
+  }
+
+  void loginUser() async {
+    print('login call');
+    setState(() => _isCallOnce = true);
+    InsertOverLay();
+
     emailId = emailIdTextController.text;
     password = passwordTextController.text;
 
     if (emailId.isNotEmpty && password.isNotEmpty) {
-      FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: emailId, password: password)
-          .then((value) {
-        var user = value.user;
-        if (user != null) {
-          print(user.uid);
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (_) => UsersScreen()),
-              (route) => false);
-        }
-      }).catchError((e) {
-        print(e.toString());
+      await Future.delayed(Duration(milliseconds: 1000), () {
+        FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: emailId, password: password)
+            .then((value) {
+          var user = value.user;
+          if (user != null) {
+            RemoveOverLay();
+            print(user.uid);
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (_) => UsersScreen()),
+                (route) => false);
+          }
+        }).catchError((e) {
+          RemoveOverLay();
+          setState(() => _isCallOnce = false);
+          print(e.toString());
+        });
       });
     } else {
+      setState(() => _isCallOnce = false);
       print('Invalid Credentials');
     }
   }
