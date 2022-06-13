@@ -1,5 +1,8 @@
+import 'package:chat_app/screens/signup_screen.dart';
 import 'package:chat_app/screens/users_screen.dart';
 import 'package:chat_app/widgets/custom_text_field_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
@@ -53,11 +56,30 @@ class LoginScreen extends StatelessWidget {
                     textEditingController: passwordTextController,
                   ),
                 ),
-                Text(
-                  'Forgot Password ?',
-                  style: TextStyle(
-                    color: Colors.blue[900],
+                InkWell(
+                  child: Text(
+                    'Forgot Password ?',
+                    style: TextStyle(
+                      color: Colors.blue[900],
+                    ),
                   ),
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Center(child: CircularProgressIndicator());
+                        });
+
+                    // Navigator.of(context).pop();
+                    Future.delayed(Duration(seconds: 5), () {
+                      // Navigator.pop(context);
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SignupScreen()),
+                          (route) => false);
+                    });
+                  },
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -83,11 +105,34 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(
-                  'Dont have account ? Sign Up',
-                  style: TextStyle(
-                    color: Colors.blue[900],
+                InkWell(
+                  child: Text(
+                    'Dont have account ? Sign Up',
+                    style: TextStyle(
+                      color: Colors.blue[900],
+                    ),
                   ),
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Center(child: CircularProgressIndicator());
+                        });
+
+                    // Navigator.of(context).pop();
+                    Future.delayed(Duration(seconds: 3), () {
+                      // Navigator.pop(context);
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SignupScreen()),
+                          (route) => false);
+                    });
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => SignupScreen()),
+                    // );
+                  },
                 ),
               ],
             ),
@@ -98,17 +143,36 @@ class LoginScreen extends StatelessWidget {
   }
 
   void loginUser(BuildContext context) {
-    emailId = emailIdTextController.text;
-    password = passwordTextController.text;
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Center(child: CircularProgressIndicator());
+        });
 
-    if (emailId == 'login' && password == '12') {
-      emailIdTextController.clear();
-      passwordTextController.clear();
-      
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => UsersScreen()), (route) => false);
-    } else {
-      print('Invalid Credentials');
-    }
+    // Navigator.of(context).pop();
+    Future.delayed(Duration(seconds: 5), () {
+      // Navigator.pop(context);
+      emailId = emailIdTextController.text;
+      password = passwordTextController.text;
+
+      if (emailId.isNotEmpty && password.isNotEmpty) {
+        emailIdTextController.clear();
+        passwordTextController.clear();
+
+        FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: emailId, password: password)
+            .then((value) {
+          var user = value.user;
+          if (user != null) {
+            print(user.uid);
+          }
+        }).catchError((e) {
+          print(e.toString());
+        });
+      } else {
+        print('Invalid Credentials');
+      }
+      Navigator.of(context).pop();
+    });
   }
 }

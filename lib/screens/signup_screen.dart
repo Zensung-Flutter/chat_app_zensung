@@ -1,17 +1,26 @@
 import 'package:chat_app/screens/users_screen.dart';
 import 'package:chat_app/widgets/custom_text_field_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-class SignupScreen extends StatelessWidget {
+class SignupScreen extends StatefulWidget {
   SignupScreen({super.key});
 
+  @override
+  State<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
   String emailId = '';
+
   String password = '';
 
   TextEditingController emailIdTextController = TextEditingController();
 
   TextEditingController passwordTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +34,7 @@ class SignupScreen extends StatelessWidget {
                   height: 50,
                 ),
                 const Text(
-                  'Login',
+                  'SignUp Page',
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 30,
@@ -83,11 +92,16 @@ class SignupScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(
-                  'Dont have account ? Sign Up',
-                  style: TextStyle(
-                    color: Colors.blue[900],
+                InkWell(
+                  child: Text(
+                    'Dont have account ? Sign Up',
+                    style: TextStyle(
+                      color: Colors.blue[900],
+                    ),
                   ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                 ),
               ],
             ),
@@ -98,17 +112,63 @@ class SignupScreen extends StatelessWidget {
   }
 
   void loginUser(BuildContext context) {
-    emailId = emailIdTextController.text;
-    password = passwordTextController.text;
+    // showDialog(
+    //     context: context,
+    //     builder: (context) {
+    //       return Center(child: CircularProgressIndicator());
+    //     });
+    // Navigator.of(context).pop();
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Center(child: CircularProgressIndicator());
+        });
 
-    if (emailId == 'login' && password == '12') {
-      emailIdTextController.clear();
-      passwordTextController.clear();
-      
+    // Navigator.of(context).pop();
+    Future.delayed(Duration(seconds: 3), () {
+      // Navigator.pop(context);
+      emailId = emailIdTextController.text;
+      password = passwordTextController.text;
+
+      if (emailId.isNotEmpty && password.isNotEmpty) {
+        emailIdTextController.clear();
+        passwordTextController.clear();
+
+        FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: emailId, password: password)
+            .then((value) {
+          var user = value.user;
+          if (user != null) {
+            print(user.uid);
+            addUserDataToDatabase(user.uid);
+          }
+        }).catchError((e) {
+          print(e.toString());
+        });
+        // Navigator.of(context).pushAndRemoveUntil(
+        //     MaterialPageRoute(builder: (_) => UsersScreen()), (route) => false);
+      } else {
+        print('Invalid Credentials');
+      }
+    });
+  }
+
+  void addUserDataToDatabase(String uid) {
+    Map<String, dynamic> data = {
+      'name': 'Aniket${DateTime.now().millisecondsSinceEpoch.toString()}',
+      'uid': uid,
+      // 'timestamp':DateTime.now().millisecondsSinceEpoch.toString(),
+      'age': 21,
+      'isOnline': true
+    };
+
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(uid)
+        .set(data)
+        .then((value) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (_) => UsersScreen()), (route) => false);
-    } else {
-      print('Invalid Credentials');
-    }
+    });
   }
 }
