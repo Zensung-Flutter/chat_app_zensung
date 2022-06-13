@@ -1,18 +1,26 @@
 import 'package:chat_app/screens/users_screen.dart';
 import 'package:chat_app/widgets/custom_text_field_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-class SignupScreen extends StatelessWidget {
+class SignupScreen extends StatefulWidget {
   SignupScreen({super.key});
 
+  @override
+  State<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
   String emailId = '';
+
   String password = '';
 
   TextEditingController emailIdTextController = TextEditingController();
 
   TextEditingController passwordTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +67,7 @@ class SignupScreen extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: InkWell(
                     onTap: () {
-                      loginUser(context);
+                      loginUser();
                     },
                     child: Container(
                       width: double.infinity,
@@ -98,7 +106,7 @@ class SignupScreen extends StatelessWidget {
     );
   }
 
-  void loginUser(BuildContext context) {
+  void loginUser() {
     emailId = emailIdTextController.text;
     password = passwordTextController.text;
 
@@ -111,6 +119,8 @@ class SignupScreen extends StatelessWidget {
         var user = value.user;
         if(user != null){
           //TODO : Add user to database
+          print(user.uid);
+          addUserDatatoDatabase(user.uid);
         }
         }).catchError((e){
           print(e.toString());
@@ -118,5 +128,22 @@ class SignupScreen extends StatelessWidget {
     } else {
       print('Invalid Credentials');
     }
+  }
+
+  void addUserDatatoDatabase(String uid){
+    String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    Map<String, dynamic> data={
+      'firstname': 'shweta${timestamp}',
+      'lastname' : 'Naikawadi',
+      'uid' :  uid,
+      'timestamp': timestamp,
+      'age' : '22',
+      'isOnline' : true,
+    };
+    FirebaseFirestore.instance.
+    collection('users').doc(uid).set(data).then((value) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => UsersScreen()), (route) => false);
+    });
   }
 }
