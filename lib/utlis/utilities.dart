@@ -28,3 +28,11 @@ String getUserName(String firstName, String lastName) {
   var name = firstName.substring(0, 5);
   return '$name $lastName';
 }
+
+String getDateTime(int dateTime) {
+  var date = DateTime.fromMillisecondsSinceEpoch(dateTime);
+  var minute = date.minute.toString();
+  var hr = date.hour == 0 ? "" : date.hour.toString();
+
+  return hr == "" ? minute : '$hr : $minute';
+}

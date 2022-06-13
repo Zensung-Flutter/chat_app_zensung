@@ -23,6 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextEditingController passwordTextController = TextEditingController();
 
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,13 +100,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: double.infinity,
                       height: 50,
                       child: Center(
-                          child: Text(
-                        'Login',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      )),
+                          child: isLoading
+                              ? CircularProgressIndicator()
+                              : Text(
+                                  'Login',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                )),
                       decoration: BoxDecoration(
                         color: Colors.purple,
                         borderRadius: BorderRadius.circular(10),
@@ -131,18 +135,23 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void loginUser() {
+    setState(() {
+      isLoading = true;
+    });
     emailId = emailIdTextController.text;
     password = passwordTextController.text;
 
     if (emailId.isNotEmpty && password.isNotEmpty) {
-      emailIdTextController.clear();
-      passwordTextController.clear();
-
       FirebaseAuth.instance
           .signInWithEmailAndPassword(email: emailId, password: password)
           .then((value) {
+        setState(() {
+          isLoading = false;
+        });
         var user = value.user;
         if (user != null) {
+          emailIdTextController.clear();
+          passwordTextController.clear();
           print(user.uid);
 
           Navigator.of(context).pushAndRemoveUntil(
@@ -151,6 +160,9 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       }).catchError((e) {
         print(e.toString());
+        setState(() {
+          isLoading = false;
+        });
       });
     } else {
       print('Invalid Credentials');

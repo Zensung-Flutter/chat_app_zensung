@@ -1,3 +1,5 @@
+import 'package:chat_app/utlis/utilities.dart';
+import 'package:chat_app/widgets/chat_bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -90,38 +92,15 @@ class _ChatScreenState extends State<ChatScreen> {
             child: ListView.builder(
               itemCount: messagesList.length,
               itemBuilder: (BuildContext context, int index) {
-                return Row(
-                  children: [
-                    messagesList[index]['fromId'] == uid
-                        ? Spacer()
-                        : Container(),
-                    ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: width * 0.8),
-                      child: Card(
-                        child: Container(
-                            child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(messagesList[index]['messageBody']),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                      '${DateTime.now().difference(DateTime.fromMillisecondsSinceEpoch(messagesList[index]['timestamp'])).inSeconds.toString()} m ago'),
-                                ],
-                              )
-                            ],
-                          ),
-                        )),
-                      ),
-                    ),
-                    messagesList[index]['toId'] == uid ? Spacer() : Container(),
-                  ],
-                );
+                return messagesList[index]['fromId'] == uid
+                    ? SenderChatBubbleWidget(
+                        width: width,
+                        message: messagesList[index]['messageBody'],
+                        dateTime: messagesList[index]['timestamp'])
+                    : RecieverChatBubbleWidget(
+                        width: width,
+                        message: messagesList[index]['messageBody'],
+                        dateTime: messagesList[index]['timestamp']);
               },
             ),
           )
