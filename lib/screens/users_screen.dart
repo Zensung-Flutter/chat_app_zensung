@@ -100,7 +100,12 @@ class _UsersScreenState extends State<UsersScreen> {
   }
 
   void getUser() {
-    FirebaseFirestore.instance.collection('users').get().then((value) {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('uid', isNotEqualTo: uid)
+        .get()
+        .then((value) {
       setState(() {
         users = value.docs;
       });
