@@ -1,18 +1,29 @@
 import 'package:chat_app/screens/users_screen.dart';
 import 'package:chat_app/widgets/custom_text_field_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
-class SignupScreen extends StatelessWidget {
+class SignupScreen extends StatefulWidget {
   SignupScreen({super.key});
 
+  @override
+  State<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
   String emailId = '';
+
   String password = '';
+
+  bool isLoding = false;
+
+  bool isPasswordObscure = true;
 
   TextEditingController emailIdTextController = TextEditingController();
 
   TextEditingController passwordTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,29 +59,47 @@ class SignupScreen extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: CustomTextFieldWidget(
-                    labelText: 'password',
+                    labelText: 'Password',
                     icon: Icons.lock,
                     isObscure: true,
                     textEditingController: passwordTextController,
+                    iconButton: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          isPasswordObscure = !isPasswordObscure;
+                        });
+                      },
+                      icon: Icon(isPasswordObscure
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                    ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: InkWell(
                     onTap: () {
-                      signupUser(context);
+                      if (!isLoding) {
+                        signupUser();
+
+                        setState(() {
+                          isLoding = true;
+                        });
+                      }
                     },
                     child: Container(
                       width: double.infinity,
                       height: 50,
                       child: Center(
-                          child: Text(
-                        'Sign Up',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      )),
+                          child: isLoding
+                              ? CircularProgressIndicator()
+                              : Text(
+                                  'Sign Up',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                )),
                       decoration: BoxDecoration(
                         color: Colors.purple,
                         borderRadius: BorderRadius.circular(10),
@@ -97,7 +126,7 @@ class SignupScreen extends StatelessWidget {
     );
   }
 
-  void signupUser(BuildContext context) {
+  void signupUser() {
     emailId = emailIdTextController.text;
     password = passwordTextController.text;
 
@@ -112,12 +141,41 @@ class SignupScreen extends StatelessWidget {
         if (user != null) {
           //TODO : Add user to database
           print(user.uid);
+          addUSerToDataToDatabase(user.uid);
         }
       }).catchError((e) {
         print(e.toString());
+        setState(() {
+          isLoding = false;
+        });
       });
     } else {
-      print('Invalid Credentials');
+      print('Invalid details');
+      setState(() {
+        isLoding = false;
+      });
     }
+  }
+
+  void addUSerToDataToDatabase(String uid) {
+    String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+
+    Map<String, dynamic> data = {
+      'firstName': 'Devdatta$timestamp',
+      'lastName': 'Shinde',
+      'uid': uid,
+      'timestamp': timestamp,
+      'age': 31,
+      'isOnline': true,
+    };
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .set(data)
+        .then((value) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => UsersScreen()),
+          (route) => false);
+    });
   }
 }
